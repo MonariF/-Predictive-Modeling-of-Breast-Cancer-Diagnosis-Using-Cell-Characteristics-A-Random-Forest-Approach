@@ -1,0 +1,67 @@
+data=read.csv(file.choose())
+head(data)
+colnames(data)
+rownames(data)
+
+# Load necessary library (ggplot2)
+library(ggplot2)
+# Create a bar plot for diagnosis with skyblue color
+ggplot(data, aes(x = diagnosis)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = "Diagnosis Distribution", x = "Diagnosis", y = "Frequency")
+#Objective 1
+# Recode "diagnosis" variable to 0 (benign) and 1 (malignant)
+data$diagnosis <- ifelse(data$diagnosis == "M", 1, 0)
+
+# Now, you can fit the logistic regression model
+model1 <- glm(diagnosis ~ radius_mean + texture_mean + perimeter_mean + area_mean, data = data, family = "binomial")
+model1
+
+# Load the xtable package
+library(xtable)
+# Fit the logistic regression model (replace this with your actual model)
+model <- glm(formula = diagnosis ~ radius_mean + texture_mean + perimeter_mean + area_mean, family = "binomial", data = data)
+
+# Create a table from the model summary
+model_table <- xtable(summary(model))
+# Print the table
+print(model_table)
+#Objective 2
+library(randomForest)
+# Fit a random forest classification model
+set.seed(123)  # For reproducibility
+model2 <- randomForest(diagnosis ~ radius_mean + texture_mean + perimeter_mean + area_mean, data = data, ntree = 500)
+#Objective 3
+# Load the randomForest package if not already loaded
+if (!require(randomForest)) {
+  install.packages("randomForest")
+  library(randomForest)
+}
+
+# Define the independent variables (cell characteristics)
+independent_vars <- c("radius_mean", "texture_mean", "perimeter_mean", "area_mean")
+
+# Fit a random forest classifier
+model3 <- randomForest(diagnosis ~ ., data = data[, c("diagnosis", independent_vars)], ntree = 100)
+
+# Summary of the model
+print(model3)
+
+
+
+
+
+
+
+
+
+
+
+
+library(randomForest)
+# Fit a random forest classification model
+set.seed(123)  # For reproducibility
+model2 <- randomForest(diagnosis ~ radius_mean + texture_mean + perimeter_mean + area_mean, data = data, ntree = 500)
+
+
+
